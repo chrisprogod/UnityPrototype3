@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,9 +11,11 @@ public class PlayerController : MonoBehaviour
      public float gravityModifier;
      public bool isOnGround = true;
      public bool gameOver;
+     private Animator playerAnim;
     // Start is called before the first frame update
     void Start()
     {
+        playerAnim = GetComponent<Animator>();
         playerRb = GetComponent<Rigidbody>();
         Physics.gravity *= gravityModifier;
     }
@@ -24,7 +27,9 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+            playerAnim.SetTrigger("Jump_trig");
         }
+
     }
 
     private void OnCollisionEnter(Collision collision) 
