@@ -8,9 +8,11 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRb;
     public float jumpForce = 10;
-     public float gravityModifier;
-     public bool isOnGround = true;
-     public bool gameOver;
+    public float gravityModifier;
+    public bool isOnGround = true;
+    public bool gameOver;
+    public ParticleSystem explosionParticle;
+
      private Animator playerAnim;
     // Start is called before the first frame update
     void Start()
@@ -35,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision collision) 
     {
         isOnGround = true;
-        
+
 
         if (collision.gameObject.CompareTag("Ground"))
         {
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour
             gameOver = true;
             playerAnim.SetBool("Death_b", true);
             playerAnim.SetInteger("DeathType_int", 1);
+            explosionParticle.Play();
         }
     }
 }
