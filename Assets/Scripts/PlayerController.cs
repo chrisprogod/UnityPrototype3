@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    private PointManager pointManager;
     private AudioSource playerAudio;
     private Rigidbody playerRb;
     public float jumpForce = 10;
@@ -16,15 +20,19 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem dirtParticles;
     public AudioClip jumpSound;
     public AudioClip crashSound;
-
      private Animator playerAnim;
+     public TextMeshProUGUI gameOverText;
+     private bool gameIsOver = false;
     // Start is called before the first frame update
     void Start()
     {
+        gameOverText.gameObject.SetActive(false);
         playerAnim = GetComponent<Animator>();
         playerRb = GetComponent<Rigidbody>();
         Physics.gravity *= gravityModifier;
         playerAudio = GetComponent<AudioSource>();
+        pointManager = GameObject.Find("PointManager").GetComponent<PointManager>();
+
     }
 
     // Update is called once per frame
@@ -39,8 +47,37 @@ public class PlayerController : MonoBehaviour
             playerAudio.PlayOneShot(jumpSound, 1.0f);
         }
 
+        //restart game  when r is pressed
+        if (gameIsOver && Input.GetKeyDown(KeyCode.R)) 
+        {
+            RestartGame();
+        }
+
     }
 
+    //restart game function
+    void RestartGame()
+    {
+        Time.timeScale = 1f;  
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+    }
+
+    void GameOver()
+{
+    gameIsOver = true;
+    gameOverText.gameObject.SetActive(true);
+    pointManager.ShowFinalText();
+
+    // Start a coroutine to delay the game pause
+    StartCoroutine(DelayedPause());
+}
+
+IEnumerator DelayedPause()
+{
+    // Wait for 1 second
+    yield return new WaitForSeconds(3f);
+    Time.timeScale = 0f;
+}
     private void OnCollisionEnter(Collision collision) 
     {
         isOnGround = true;
@@ -59,6 +96,7 @@ public class PlayerController : MonoBehaviour
             explosionParticle.Play();
             dirtParticles.Stop();
             playerAudio.PlayOneShot(crashSound, 1.0f);
+            GameOver();
         }
     }
 }

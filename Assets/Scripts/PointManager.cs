@@ -8,11 +8,13 @@ public class PointManager : MonoBehaviour
 {
     public int points = 0;
     public TextMeshProUGUI pointsText;
+    public TextMeshProUGUI FinalScoreText;
+  
     // Start is called before the first frame update
     void Start()
     {
-        
         UpdatePointUI();
+        FinalScoreText.gameObject.SetActive(false);
     }
 
    public void GetPoints()
@@ -25,5 +27,11 @@ public class PointManager : MonoBehaviour
     void UpdatePointUI()
     {
         pointsText.text = "" + points;
+        FinalScoreText.text = "Final score: " + points + " points";
+    }
+
+    public void ShowFinalText()
+    {
+        FinalScoreText.gameObject.SetActive(true);
     }
 }
