@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour
     //restart game function
     void RestartGame()
     {
+        //attendre une seconde avant game over
         Time.timeScale = 1f;  
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
     }
@@ -67,8 +68,6 @@ public class PlayerController : MonoBehaviour
     gameIsOver = true;
     gameOverText.gameObject.SetActive(true);
     pointManager.ShowFinalText();
-
-    // Start a coroutine to delay the game pause
     StartCoroutine(DelayedPause());
 }
 

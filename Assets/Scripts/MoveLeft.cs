@@ -9,7 +9,6 @@ public class MoveLeft : MonoBehaviour
     private PlayerController playerControllerScript;
     private PointManager pointManager;
     private float leftBound = -4;
-    public float speedIncreaseFactor = 4;
 
     void Start()
     {
@@ -35,6 +34,6 @@ public class MoveLeft : MonoBehaviour
 
     void AdjustSpeed()
     {
-        currentSpeed = baseSpeed + (pointManager.points / 10) * speedIncreaseFactor;
+        currentSpeed = baseSpeed + (pointManager.points / 10) * 4;
     }
 }
