@@ -37,7 +37,7 @@ public class PlayerControllerX : MonoBehaviour
 void Update()
 {
     // Check if space bar is pressed down this frame
-    if (Input.GetKeyDown(KeyCode.Space) && gameOver == false && transform.position.y < 15 && !spacePressed)
+    if (Input.GetKeyDown(KeyCode.Space) && gameOver == false && transform.position.y < 13 && !spacePressed)
     {
         // Set the flag to true to prevent multiple presses in the same frame
         spacePressed = true;
@@ -53,9 +53,9 @@ void Update()
     }
 
     // Ensure the player does not go above y = 15
-    if (transform.position.y >= 15)
+    if (transform.position.y >= 13)
     {
-        transform.position = new Vector3(transform.position.x, 15, transform.position.z);
+        transform.position = new Vector3(transform.position.x, 13, transform.position.z);
     }
 }
 
@@ -84,10 +84,8 @@ void Update()
 
          else if (other.gameObject.CompareTag("Ground"))
         {
-            fireworksParticle.Play();
             playerAudio.PlayOneShot(bounceSound, 1.0f);
-            playerRb.AddForce(Vector3.up * 500, ForceMode.Impulse);
-            
+            playerRb.AddForce(Vector3.up * 550, ForceMode.Impulse);
         }
 
     }
