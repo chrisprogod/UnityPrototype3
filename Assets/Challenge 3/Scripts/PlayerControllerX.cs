@@ -6,6 +6,7 @@ public class PlayerControllerX : MonoBehaviour
 {
     public bool gameOver;
 
+    private bool spacePressed = false;
     public float floatForce;
     private float gravityModifier = 1.5f;
     private Rigidbody playerRb;
@@ -16,6 +17,7 @@ public class PlayerControllerX : MonoBehaviour
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
+    public AudioClip bounceSound;
 
 
     // Start is called before the first frame update
@@ -30,14 +32,35 @@ public class PlayerControllerX : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+       // Define a flag to track whether space bar was pressed in this frame
+
+void Update()
+{
+    // Check if space bar is pressed down this frame
+    if (Input.GetKeyDown(KeyCode.Space) && gameOver == false && transform.position.y < 15 && !spacePressed)
     {
-        // While space is pressed and player is low enough, float up
-        if (Input.GetKey(KeyCode.Space) && !gameOver)
-        {
-            playerRb.AddForce(Vector3.up * floatForce);
-        }
+        // Set the flag to true to prevent multiple presses in the same frame
+        spacePressed = true;
+
+        // Apply upward force to the player
+        playerRb.AddForce(Vector3.up * floatForce, ForceMode.Impulse);
     }
+
+    // Reset the flag when space bar is released
+    if (Input.GetKeyUp(KeyCode.Space))
+    {
+        spacePressed = false;
+    }
+
+    // Ensure the player does not go above y = 15
+    if (transform.position.y >= 15)
+    {
+        transform.position = new Vector3(transform.position.x, 15, transform.position.z);
+    }
+}
+
+
+
 
     private void OnCollisionEnter(Collision other)
     {
@@ -57,7 +80,14 @@ public class PlayerControllerX : MonoBehaviour
             fireworksParticle.Play();
             playerAudio.PlayOneShot(moneySound, 1.0f);
             Destroy(other.gameObject);
+        }
 
+         else if (other.gameObject.CompareTag("Ground"))
+        {
+            fireworksParticle.Play();
+            playerAudio.PlayOneShot(bounceSound, 1.0f);
+            playerRb.AddForce(Vector3.up * 500, ForceMode.Impulse);
+            
         }
 
     }
